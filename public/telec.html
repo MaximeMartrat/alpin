@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://kit.fontawesome.com/c68e41c693.js" crossorigin="anonymous"></script>
+    <title>Document</title>
+</head>
+<body>
+    <script src="/socket.io/socket.io.js"></script>
+    <style>
+        body{
+            height: 100vh;
+            width: 100vw;
+            display: grid;
+            background-image: url('table.jpg');
+            background-size: cover;
+        }
+        button{
+            width: 60px;
+            height: 60px;
+            border-radius: 100%;
+            font-size: 40px;
+            text-shadow: 0px 3px 2px rgb(60, 60, 60);
+            border: 3px outset rgba(59, 58, 58, 0.486);
+            background-image: linear-gradient(to bottom right, rgb(157, 157, 157), rgb(98, 98, 98));
+            box-shadow: 1px 5px 3px rgb(30, 30, 30);
+            color: white;
+        }
+        button:hover{
+            cursor: pointer;
+            background-image: linear-gradient(to bottom right, rgb(157, 157, 157), rgb(90, 89, 89));
+        }
+        button:active{
+            box-shadow: none;
+        }
+        #commande{
+            margin: auto;
+            height: 500px;
+            width: 220px;
+            border: 1px solid rgb(50, 50, 50);
+            border-radius: 20px;
+            background-image: linear-gradient(to bottom right, rgb(50, 50, 50), rgb(25, 25, 26));
+            border: 15px outset rgb(56, 55, 55);
+            box-shadow: 15px 20px 15px rgb(59, 41, 31);
+        }
+        #telec{
+            margin: auto;
+            margin-top: 50px;
+            height: 200px;
+            width: 200px;
+            border: 5px outset rgb(47, 47, 47); 
+            border-radius: 20px; 
+            background-image: linear-gradient(to bottom right, rgb(87, 87, 87), rgb(45, 45, 45));
+            box-shadow: 2px 5px 5px rgb(24, 24, 24);
+            display: grid;
+            grid-template-columns: 5% 30% 30% 30% 5%;
+            grid-template-rows: 5% 30% 30% 30% 5%;
+        } 
+        #top{
+            margin: auto;
+            grid-column: 3;
+            grid-row: 2;
+        }
+        #left{
+            margin: auto;
+            grid-column: 2;
+            grid-row: 3;
+        }
+        #back{
+            margin: auto;
+            grid-column: 3;
+            grid-row: 4;
+        }
+        #right{
+            margin: auto;
+            grid-column: 4;
+            grid-row: 3;
+        }
+    </style>
+    <div id="commande">
+        <div id="telec">
+            <button id="top"><i class="fa-solid fa-caret-up"></i></button>
+            <button id="left"><i class="fa-solid fa-caret-left"></i></button>
+            <button id="back"><i class="fa-solid fa-caret-down"></i></button>
+            <button id="right"><i class="fa-solid fa-caret-right"></i></button>
+        </div>
+    </div>
+    <script>
+        //connexion au server et création d'un nouveau socket
+        let socket = io();
+        //recupération des boutons
+        const UP = document.getElementById('top');
+        const LEFT = document.getElementById('left');
+        const DOWN = document.getElementById('back');
+        const RIGHT = document.getElementById('right');
+
+        //ecoute des boutons et emissions des valeurs vers le server
+        UP.addEventListener('click', function() {
+            socket.emit('move', 'up') ;
+        })
+        LEFT.addEventListener('click', function() {
+            socket.emit('move', 'left') ;
+        })
+        DOWN.addEventListener('click', function() {
+            socket.emit('move', 'down') ;
+        })
+        RIGHT.addEventListener('click', function() {
+            socket.emit('move', 'right') ;
+        });
+        
+    </script>
+</body>
+</html>

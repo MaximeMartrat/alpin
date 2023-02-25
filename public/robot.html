@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script src="/socket.io/socket.io.js"></script>
+    <style>
+        *{
+            margin: 0;
+            padding: 0;
+        }
+        body{
+            
+            height: 100vh;
+            width: 100vw;
+        }
+        #tabScore{
+            height:10vh;
+            width:100vw;
+            text-align: center;
+            line-height: 40px;
+            background-color:cyan;
+        }
+        #tabJeu{
+            height:90vh;
+            width:100vw;
+            background-image: url('computer.png');
+            background-size: cover;
+        }
+        img{
+            width: 200px;
+            height: 200px;
+        }
+        #robot{
+            position: absolute;
+            left: 40%;
+            top: 40%;
+        }
+        #target{
+            position: absolute;
+        }
+        #target img{
+            width: 100px;
+            height:100px;
+        }
+    </style>
+    <div id="tabScore">
+        <h2 id = score>Score : </h2>
+        <h2 id = loose>Loose : </h2>
+    </div>
+    <div id="tabJeu">
+        <div id="robot">
+            <img class="robot" src="robot2.png">
+        </div>
+        <div id="target">
+            <img class="target" src="screws.png">
+        </div>
+    </div>
+
+    <script>
+        //connexion au server et création d'un nouveau socket
+        let socket = io();
+        const robot = document.getElementById('robot');
+        const target = document.getElementById('target');
+        let image = document.getElementsByClassName('robot');
+        let afficherScore = document.getElementById('score')
+        let afficherLoose = document.getElementById('loose')
+        //declaration des variables pour les déplacements et la vitesse
+        let rImg = 'robot2.png';
+        let rWin = "robot.png";
+        let rLoose = 'robot3.png'
+        let robotX = 40;
+        let robotY = 40;
+        let speed = 5;
+        let score = 0;
+        let loose = 0;
+        
+
+        // fonction pour afficher la target à des coordonnées aléatoires
+        function afficherTargetAleatoire() {
+            // définir la coordonnée Y de la target    
+            targetY = Math.floor(Math.random() * 90);
+            // vérifier si la cible est en dehors des limites de la zone de jeu, si oui, la déplacer à la limite
+            if (targetY > 80) {
+                targetY = 80;
+            } else if (targetY < 9) {
+                targetY = 9;
+            }
+            // définir la coordonnée X de la target
+            targetX = Math.floor(Math.random() * 90);
+            // vérifier si la cible est en dehors des limites de la zone de jeu, si oui, la déplacer à la limite
+            if (targetX > 85) {
+                targetX = 85;
+            } else if (targetX < 0) {
+                targetX = 0;
+            }
+            // définir la coordonnée Y de la target    
+            target.style.top = targetY + "%"; 
+            // définir la coordonnée X de la target
+            target.style.left = targetX + "%"; 
+        }
+
+        // appel de la fonction pour afficher la target initialement
+        afficherTargetAleatoire()
+        //recupération du socket et des valeurs des boutons cliqués dans le message move
+        socket.on('move', function(direction) {
+            //switch sur les valeurs des boutons cliqués pour incrémentation ou décrémentation des coordonnées x et y du robot
+            switch(direction) {
+                case 'up':
+                    if(robotY > 0) {
+                        robotY -=  speed;
+                    } else {
+                        loose++;
+                    }
+                    break;
+                case 'left':
+                    if(robotX > -1) {
+                        robotX -= speed;
+                    } else {
+                        loose++;
+                    }
+                    break;
+                case 'down':
+                    if(robotY < 90) {
+                        robotY += speed;
+                    } else {
+                        loose++;
+                    }
+                    break;
+                case 'right':
+                    if(robotX < 90) {
+                        robotX += speed;
+                    } else {
+                        loose++;
+                    }
+                    break;
+            }
+            //incrémentation ou décrémentations du top et du left pour changer position de la div robot
+            robot.style.top = robotY + "%";
+            robot.style.left = robotX + "%";
+            // Vérifie si la position actuelle du robot correspond à la position de la cible
+            // Si oui, met à jour le score et la position de la cible, et change l'image du robot
+            if (robotX >= (parseInt(target.style.left) - 5) && robotX <= (parseInt(target.style.left) + 5) &&
+            robotY >= (parseInt(target.style.top) - 5) && robotY <= (parseInt(target.style.top) + 5)) {
+                // changer l'image du robot
+                image[0].src = rWin;
+                // ajouter un point au score
+                score += 1;
+                afficherScore.innerText = "Score : " + score;
+                // afficher une nouvelle target aléatoire
+                afficherTargetAleatoire();
+                setTimeout(function() {
+                    image[0].src = rImg;
+                }, 500);
+            }
+            // Vérification si le robot touche le bord de la zone de jeu
+            if(robotX < 0 || robotX >= 85 || robotY <= 9 || robotY >= 80) {
+                loose++;
+                afficherLoose.textContent = 'Loose : ' + loose;
+                image[0].src = rLoose;
+                setTimeout(function() {
+                    image[0].src = rImg;
+                }, 500);
+            }
+        });
+
+      
+    </script>
+</body>
+</html>
