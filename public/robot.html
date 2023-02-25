@@ -14,22 +14,26 @@
             padding: 0;
         }
         body{
-            
             height: 100vh;
             width: 100vw;
+            background-image: linear-gradient(to bottom right, rgb(33, 170, 81), rgb(3, 58, 18));
         }
         #tabScore{
             height:10vh;
             width:100vw;
             text-align: center;
-            line-height: 40px;
-            background-color:cyan;
+            line-height: 50px;
+            color:rgb(14, 226, 85);
+            text-shadow: 2px 1px 0px rgb(3, 65, 24);
         }
         #tabJeu{
-            height:90vh;
-            width:100vw;
+            height:85vh;
+            width:95vw;
+            margin: auto;
+            margin-top: 10px;
             background-image: url('computer.png');
             background-size: cover;
+            border: 10px inset rgba(70, 119, 139, 0.38);
         }
         img{
             width: 200px;
@@ -49,8 +53,8 @@
         }
     </style>
     <div id="tabScore">
-        <h2 id = score>Score : </h2>
-        <h2 id = loose>Loose : </h2>
+        <h2 id = score>SCORE : </h2>
+        <h2 id = loose>LOOSE : </h2>
     </div>
     <div id="tabJeu">
         <div id="robot">
@@ -75,7 +79,7 @@
         let rLoose = 'robot3.png'
         let robotX = 40;
         let robotY = 40;
-        let speed = 5;
+        let speed = 10;
         let score = 0;
         let loose = 0;
         
@@ -85,16 +89,16 @@
             // définir la coordonnée Y de la target    
             targetY = Math.floor(Math.random() * 90);
             // vérifier si la cible est en dehors des limites de la zone de jeu, si oui, la déplacer à la limite
-            if (targetY > 80) {
-                targetY = 80;
+            if (targetY > 75) {
+                targetY = 75;
             } else if (targetY < 9) {
                 targetY = 9;
             }
             // définir la coordonnée X de la target
-            targetX = Math.floor(Math.random() * 90);
+            targetX = Math.floor(Math.random() * 80);
             // vérifier si la cible est en dehors des limites de la zone de jeu, si oui, la déplacer à la limite
-            if (targetX > 85) {
-                targetX = 85;
+            if (targetX > 75) {
+                targetX = 75;
             } else if (targetX < 0) {
                 targetX = 0;
             }
@@ -142,15 +146,14 @@
             //incrémentation ou décrémentations du top et du left pour changer position de la div robot
             robot.style.top = robotY + "%";
             robot.style.left = robotX + "%";
-            // Vérifie si la position actuelle du robot correspond à la position de la cible
-            // Si oui, met à jour le score et la position de la cible, et change l'image du robot
-            if (robotX >= (parseInt(target.style.left) - 5) && robotX <= (parseInt(target.style.left) + 5) &&
-            robotY >= (parseInt(target.style.top) - 5) && robotY <= (parseInt(target.style.top) + 5)) {
+            // Vérifie si les coordonnées de la div robot sont proches de la div target
+            if (robotX >= (parseInt(target.style.left) - 5) && robotX <= (parseInt(target.style.left) + 5) && robotY >= (parseInt(target.style.top) - 5) && robotY <= (parseInt(target.style.top) + 5)) {
+                // Si oui
                 // changer l'image du robot
                 image[0].src = rWin;
                 // ajouter un point au score
                 score += 1;
-                afficherScore.innerText = "Score : " + score;
+                afficherScore.innerText = "SCORE : " + score;
                 // afficher une nouvelle target aléatoire
                 afficherTargetAleatoire();
                 setTimeout(function() {
@@ -159,8 +162,11 @@
             }
             // Vérification si le robot touche le bord de la zone de jeu
             if(robotX < 0 || robotX >= 85 || robotY <= 9 || robotY >= 80) {
+                //si oui
+                // loose + 1
                 loose++;
-                afficherLoose.textContent = 'Loose : ' + loose;
+                //affiche loose
+                afficherLoose.textContent = 'LOOSE : ' + loose;
                 image[0].src = rLoose;
                 setTimeout(function() {
                     image[0].src = rImg;
