@@ -5,55 +5,68 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="https://kit.fontawesome.com/c68e41c693.js" crossorigin="anonymous"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Della+Respira&family=Poppins&family=Ubuntu&display=swap" rel="stylesheet">
     <title>Document</title>
 </head>
 <body>
     <script src="/socket.io/socket.io.js"></script>
     <style>
         body{
-            height: 100vh;
-            width: 100vw;
+            height: 90vh;
+            width: 99vw;
             display: grid;
-            background-image: url('table.jpg');
+            background-image: url('media/image/table.jpg');
             background-size: cover;
+            font-family: 'Della Respira', serif;
+            font-family: 'Poppins', sans-serif;
+            font-family: 'Ubuntu', sans-serif;
         }
         button{
             width: 60px;
             height: 60px;
             border-radius: 100%;
             font-size: 40px;
-            text-shadow: 0px 3px 2px rgb(60, 60, 60);
-            border: 3px outset rgba(59, 58, 58, 0.486);
-            background-image: linear-gradient(to bottom right, rgb(157, 157, 157), rgb(98, 98, 98));
-            box-shadow: 1px 5px 3px rgb(30, 30, 30);
+            text-shadow: 0px 3px 2px #513101;
+            border: 3px outset #c97d0a9a;
+            background-image: linear-gradient(to bottom right, #FF9900, #955a01);
+            box-shadow: 1px 5px 1px #693f01;
             color: white;
         }
         button:hover{
             cursor: pointer;
-            background-image: linear-gradient(to bottom right, rgb(157, 157, 157), rgb(90, 89, 89));
+            background-image: linear-gradient(to bottom right, #FF9900, #7b4a01);
         }
         button:active{
             box-shadow: none;
         }
         #commande{
+            grid-template-rows: 50% 50%;
             margin: auto;
             height: 500px;
             width: 220px;
-            border: 1px solid rgb(50, 50, 50);
             border-radius: 20px;
-            background-image: linear-gradient(to bottom right, rgb(50, 50, 50), rgb(25, 25, 26));
-            border: 15px outset rgb(56, 55, 55);
-            box-shadow: 15px 20px 15px rgb(59, 41, 31);
+            background-image: linear-gradient(to bottom right, rgb(1, 3, 110), rgb(0, 14, 45));
+            border: 15px outset rgb(0, 33, 104);
+            box-shadow: 15px 20px 15px rgb(42, 47, 64);
+        }
+        p{
+            color: white;
+            text-align: center;
+            font-size: 40px;
+            margin-top: 5px;
+            text-shadow: 0px 2px 1px rgb(145, 145, 145);
         }
         #telec{
             margin: auto;
-            margin-top: 50px;
+            margin-top: 30%;
             height: 200px;
             width: 200px;
-            border: 5px outset rgb(47, 47, 47); 
+            border: 5px outset #125071; 
             border-radius: 20px; 
-            background-image: linear-gradient(to bottom right, rgb(87, 87, 87), rgb(45, 45, 45));
-            box-shadow: 2px 5px 5px rgb(24, 24, 24);
+            background-image: linear-gradient(to bottom right, #6c9eb9, #0e3c55);
+            box-shadow: 10px 10px 5px rgb(23, 17, 56);
             display: grid;
             grid-template-columns: 5% 30% 30% 30% 5%;
             grid-template-rows: 5% 30% 30% 30% 5%;
@@ -80,6 +93,7 @@
         }
     </style>
     <div id="commande">
+        <p>nano</p>
         <div id="telec">
             <button id="top"><i class="fa-solid fa-caret-up"></i></button>
             <button id="left"><i class="fa-solid fa-caret-left"></i></button>
@@ -95,18 +109,24 @@
         const LEFT = document.getElementById('left');
         const DOWN = document.getElementById('back');
         const RIGHT = document.getElementById('right');
-
+        //fichier audio pour son telecommande
+        const btAudio = new Audio();
+        btAudio.src = 'media/son/telec.mp3';
         //ecoute des boutons et emissions des valeurs vers le server
         UP.addEventListener('click', function() {
+            btAudio.play();
             socket.emit('move', 'up') ;
         })
         LEFT.addEventListener('click', function() {
+            btAudio.play();
             socket.emit('move', 'left') ;
         })
         DOWN.addEventListener('click', function() {
+            btAudio.play();
             socket.emit('move', 'down') ;
         })
         RIGHT.addEventListener('click', function() {
+            btAudio.play();
             socket.emit('move', 'right') ;
         });
         

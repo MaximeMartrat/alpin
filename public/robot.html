@@ -4,6 +4,9 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Della+Respira&family=Poppins&family=Ubuntu&display=swap" rel="stylesheet">
     <title>Document</title>
 </head>
 <body>
@@ -17,21 +20,24 @@
             height: 100vh;
             width: 100vw;
             background-image: linear-gradient(to bottom right, rgb(33, 170, 81), rgb(3, 58, 18));
+            font-family: 'Della Respira', serif;
+            font-family: 'Poppins', sans-serif;
+            font-family: 'Ubuntu', sans-serif;
         }
         #tabScore{
             height:10vh;
             width:100vw;
             text-align: center;
             line-height: 50px;
-            color:rgb(14, 226, 85);
-            text-shadow: 2px 1px 0px rgb(3, 65, 24);
+            color:rgb(251, 0, 0);
+            text-shadow: 2px 2px 0px rgb(5, 1, 0);
         }
         #tabJeu{
             height:85vh;
             width:95vw;
             margin: auto;
             margin-top: 10px;
-            background-image: url('computer.png');
+            background-image: url('media/image/computer.png');
             background-size: cover;
             border: 10px inset rgba(70, 119, 139, 0.38);
         }
@@ -53,30 +59,38 @@
         }
     </style>
     <div id="tabScore">
-        <h2 id = score>SCORE : </h2>
-        <h2 id = loose>LOOSE : </h2>
+        <h2 id = score>VIRUS : </h2>
+        <h2 id = loose>ERROR : </h2>
     </div>
     <div id="tabJeu">
         <div id="robot">
-            <img class="robot" src="robot2.png">
+            <img class="robot" src="media/image/robot2.png">
         </div>
         <div id="target">
-            <img class="target" src="screws.png">
+            <img class="target" src="media/image/virus.png">
         </div>
     </div>
 
     <script>
         //connexion au server et création d'un nouveau socket
         let socket = io();
+        //recuperation du DOM
         const robot = document.getElementById('robot');
         const target = document.getElementById('target');
         let image = document.getElementsByClassName('robot');
-        let afficherScore = document.getElementById('score')
-        let afficherLoose = document.getElementById('loose')
-        //declaration des variables pour les déplacements et la vitesse
-        let rImg = 'robot2.png';
-        let rWin = "robot.png";
-        let rLoose = 'robot3.png'
+        let afficherScore = document.getElementById('score');
+        let afficherLoose = document.getElementById('loose');
+
+        //fichier audios pr son du jeu
+        const deadAudio = new Audio();
+        deadAudio.src = 'media/son/robot_erreur.mp3';
+        const winAudio = new Audio();
+        winAudio.src = 'media/son/robot_win.mp3';
+
+        //declaration des variables pour les déplacements, la vitesse, les img et les scores 
+        let rImg = 'media/image/robot2.png';
+        let rWin = "media/image/robot.png";
+        let rLoose = 'media/image/robot3.png';
         let robotX = 40;
         let robotY = 40;
         let speed = 10;
@@ -117,29 +131,21 @@
                 case 'up':
                     if(robotY > 0) {
                         robotY -=  speed;
-                    } else {
-                        loose++;
                     }
                     break;
                 case 'left':
                     if(robotX > -1) {
                         robotX -= speed;
-                    } else {
-                        loose++;
-                    }
+                    } 
                     break;
                 case 'down':
                     if(robotY < 90) {
                         robotY += speed;
-                    } else {
-                        loose++;
                     }
                     break;
                 case 'right':
                     if(robotX < 90) {
                         robotX += speed;
-                    } else {
-                        loose++;
                     }
                     break;
             }
@@ -149,28 +155,38 @@
             // Vérifie si les coordonnées de la div robot sont proches de la div target
             if (robotX >= (parseInt(target.style.left) - 5) && robotX <= (parseInt(target.style.left) + 5) && robotY >= (parseInt(target.style.top) - 5) && robotY <= (parseInt(target.style.top) + 5)) {
                 // Si oui
+                //emettre son de victoire
+                winAudio.play();
                 // changer l'image du robot
                 image[0].src = rWin;
                 // ajouter un point au score
                 score += 1;
-                afficherScore.innerText = "SCORE : " + score;
+                afficherScore.innerText = "VIRUS : " + score;
                 // afficher une nouvelle target aléatoire
                 afficherTargetAleatoire();
+                //remettre img de base après 1s
                 setTimeout(function() {
                     image[0].src = rImg;
-                }, 500);
+                }, 1000);
             }
             // Vérification si le robot touche le bord de la zone de jeu
             if(robotX < 0 || robotX >= 85 || robotY <= 9 || robotY >= 80) {
                 //si oui
+                //emettre son de defaite
+                deadAudio.play();
                 // loose + 1
                 loose++;
+                //renvoyer le robot à sa position initiale
+                robotX = 40;
+                robotY = 40;
                 //affiche loose
-                afficherLoose.textContent = 'LOOSE : ' + loose;
+                afficherLoose.textContent = 'ERROR : ' + loose;
+                //afficher image de defaite
                 image[0].src = rLoose;
+                //reafficher image de base au bout de 1s 
                 setTimeout(function() {
                     image[0].src = rImg;
-                }, 500);
+                }, 1000);
             }
         });
 
