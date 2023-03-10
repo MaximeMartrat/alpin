@@ -1,1 +1,1 @@
-Petit projet de telecommande de robot avec les web socket
+Petit projet de robot télécommandé sur deux pages html avec les web socket
