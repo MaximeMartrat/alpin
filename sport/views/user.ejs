@@ -7,6 +7,34 @@
     <title></title>
 </head>
 <body>
-    
+   <h1><%= message %></h1> 
+   <form method="post" action="/activite">
+       <input type="hidden" name='userId' value="<%= display[0].user_id %>"> 
+       <select name="activite" id="activite">
+    </select>
+    <input type="number" name="seance_time">min
+    <button>Valider</button>
+    <div id="display_container">
+    </div>
+    <a href="/seance">afficher</a>
+</form>
+<script>
+    window.addEventListener("load", function() {
+            fetch("/activiteSelect")
+            .then(res => res.text())
+                .then(res => {
+                    myresults = JSON.parse(res);
+                    // console.log(myresults)
+                    let activite = document.getElementById("activite");
+                    myresults.activite.forEach((item) => {
+                        let opt = document.createElement("option");
+                        opt.value = item.activite_id;
+                        opt.text = item.activite_nom;
+                        activite.add(opt);
+                    });
+                });
+    });
+      
+   </script>
 </body>
 </html>

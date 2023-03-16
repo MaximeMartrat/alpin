@@ -7,11 +7,12 @@
     <title>login</title>
 </head>
 <body>
-    <form method="get" action="/">
-        <input type="text">
-        <input type="password">
+    <div id="exist"></div>
+    <form method="post" action="/check">
+        <input type="text" value="max" name="userpseudo">
+        <input type="password" value="max12" name="userpassword">
         <button>login</button>
-        <a href="#" id="createUser">SignIn</a>
+        <a href="/create.html" id="createUser">SignIn</a>
     </form>
 </body>
 </html>

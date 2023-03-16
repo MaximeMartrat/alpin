@@ -7,15 +7,17 @@
     <title>Create User</title>
 </head>
 <body>
-    <div id="createUser">
-        <input type="text" id="userName">
-        <input type="text" id="user_lastName">
-        <input type="text" id="user_pseudo">
-        <input type="text" id="user_tel">
-        <select name="user_age" id="user_age" placeholder="votre nom"></select>
-        <select name="user_taille" id="user_taille"></select>
-        <select name="user_poids" id="user_poids"></select>
-        <select name="user_obejectif" id="user_objectif"></select>
-    </div>
+    <form action="/create.html" method="post" id="createUser">
+        <input type="text" id="user_name" name="user_name" placeholder="nom">
+        <input type="text" id="user_lastname" name="user_lastname" placeholder="prenom">
+        <input type="text" id="user_pseudo" name="user_pseudo" placeholder="pseudo">
+        <input type="text" id="user_tel" name="user_tel" placeholder="tel">
+        <input type="number" name="user_age" min="18" max="100" id="user_age" placeholder="age">
+        <input type="number" name="user_taille" min="100" id="user_taille" placeholder="taille">
+        <input type="number" name="user_poids" id="user_poids" placeholder="poids">
+        <input type="number" name="user_objectif" id="user_objectif" placeholder="objectif">
+        <input type="password" name="user_password" id="user_password" placeholder="mot de passe">
+        <button>ok</button>
+    </form>
 </body>
 </html>
